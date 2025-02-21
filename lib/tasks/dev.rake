@@ -9,15 +9,28 @@ task({ :sample_data => :environment }) do
   Board.destroy_all
   Post.destroy_all
   
+  usernames = ["alice", "bob", "carol", "dave", "eve"]
+
+  usernames.each do |username|
+    user = User.new
+    user.email = "#{username}@example.com"
+    user.password = "password"
+    user.save
+  end
+
+
+
   5.times do
     board = Board.new
     board.name = Faker::Address.community
+    board.user_id = User.all.sample.id
     board.save
 
     rand(10..50).times do
       post = Post.new
       post.board_id = board.id
       post.title = rand < 0.5 ? Faker::Commerce.product_name : Faker::Job.title
+      post.user_id = User.all.sample.id
       post.body = Faker::Lorem.paragraphs(number: rand(1..5), supplemental: true).join("\n\n")
       post.created_at = Faker::Date.backward(days: 120)
       post.expires_on = post.created_at + rand(3..90).days
