@@ -38,6 +38,10 @@
       <a href="/boards/<%= a_board.id %>">
         <%= a_board.name %>
       </a>
+      <div>
+        Owner: <%= User.where( { :id => a_board.user_id })[0].email %>
+      </div>
     </li>
+    <hr>
   <% end %>
 </ul>
